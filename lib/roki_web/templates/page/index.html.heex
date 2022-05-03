@@ -1,0 +1,14 @@
+<h1>Hello</h1>
+
+<div>
+  <h2>Online Users</h2>
+  <div id="online-users"></div>
+</div>
+
+<%= if @current_user do %>
+<h2>Public Chat Room</h2>
+<div id="messages" role="log" aria-live="polite"></div>
+<input id="chat-input" type="text">
+<% else %>
+<h2>Please log in!</h2>
+<% end %>
