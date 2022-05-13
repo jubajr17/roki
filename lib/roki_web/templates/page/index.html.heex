@@ -1,14 +1,22 @@
-<h1>Hello</h1>
+<span class="gapped full space-center">
+  <div id="online-users-section">
+    <h3>Online Users</h3>
+    <ul id="online-users"></ul>
+  </div>
 
-<div>
-  <h2>Online Users</h2>
-  <div id="online-users"></div>
-</div>
+  <%= if @current_user do %>
+  <div class="gapped full-height half-width">
+    <h3>Public Chat Room</h3>
 
-<%= if @current_user do %>
-<h2>Public Chat Room</h2>
-<div id="messages" role="log" aria-live="polite"></div>
-<input id="chat-input" type="text">
-<% else %>
-<h2>Please log in!</h2>
-<% end %>
+    <div id="chat-messages" class="full-height boxed" role="log" aria-live="polite">
+    </div>
+
+    <span>
+      <input id="chat-input" type="text" class="boxed" placeholder="message...">
+      <input type="submit" value="Send">
+    </span>
+  </div>
+  <% else %>
+  <h2>Please log in!</h2>
+  <% end %>
+</span>

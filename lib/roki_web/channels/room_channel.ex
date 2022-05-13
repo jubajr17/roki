@@ -15,7 +15,7 @@ defmodule RokiWeb.RoomChannel do
 
   @impl true
   def handle_info(:after_join, socket) do
-    user = Accounts.get_user!(socket.assigns.current_user_id)
+    user = Accounts.get_user!(socket.assigns.user_id)
 
     {:ok, _} =
       Presence.track(socket, user.id, %{
@@ -27,7 +27,8 @@ defmodule RokiWeb.RoomChannel do
 
     socket =
       socket
-      |> assign(:current_user_email, user.email)
+      |> assign(:user_email, user.email)
+      |> assign(:user_color, random_user_color())
 
     {:noreply, socket}
   end
@@ -48,7 +49,12 @@ defmodule RokiWeb.RoomChannel do
   end
 
   def handle_in("new_msg", %{"body" => body}, socket) do
-    payload = %{body: body, email: socket.assigns.current_user_email}
+    payload = %{
+      body: body,
+      email: socket.assigns.user_email,
+      color: socket.assigns.user_color
+    }
+
     broadcast!(socket, "new_msg", payload)
     {:noreply, socket}
   end
@@ -56,5 +62,18 @@ defmodule RokiWeb.RoomChannel do
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true
+  end
+
+  @available_hex_color_values ~w(6 7 8 9 A B C D E F)
+  defp random_user_color() do
+    c =
+      [
+        Enum.random(@available_hex_color_values),
+        Enum.random(@available_hex_color_values),
+        Enum.random(@available_hex_color_values)
+      ]
+      |> Enum.join("")
+
+    "##{c}"
   end
 end

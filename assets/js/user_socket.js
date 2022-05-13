@@ -56,15 +56,13 @@ socket.connect()
 let channel = socket.channel("room:lobby", {})
 let presence = new Presence(channel)
 let chatInput         = document.querySelector("#chat-input")
-let messagesContainer = document.querySelector("#messages")
+let messagesContainer = document.querySelector("#chat-messages")
 
 function renderOnlineUsers(presence) {
-  // TODO: Play here.
   let response = ""
 
   presence.list((id, {metas: [first, ...rest]}) => {
-    let count = rest.length + 1
-    response += `<br>${first.email}</br>`
+    response += `<li>${first.email}</li>`
   })
 
   document.querySelector("#online-users").innerHTML = response
@@ -80,9 +78,14 @@ chatInput.addEventListener("keypress", event => {
 })
 
 channel.on("new_msg", payload => {
-  let messageItem = document.createElement("p")
-  messageItem.innerText = `[${payload.email}] ${payload.body}`
-  messagesContainer.appendChild(messageItem)
+  let message = document.createElement("p")
+  message.style.color = payload.color
+  let name = document.createElement("text")
+  name.classList.add('name')
+  name.innerText = `${payload.email}: `
+  message.appendChild(name)
+  message.appendChild(document.createTextNode(payload.body))
+  messagesContainer.appendChild(message)
 })
 
 channel.join()
