@@ -49,13 +49,16 @@ defmodule RokiWeb.RoomChannel do
   end
 
   def handle_in("new_msg", %{"body" => body}, socket) do
-    payload = %{
-      body: body,
-      email: socket.assigns.user_email,
-      color: socket.assigns.user_color
-    }
+    if String.trim(body) != "" do
+      payload = %{
+        body: body,
+        email: socket.assigns.user_email,
+        color: socket.assigns.user_color
+      }
 
-    broadcast!(socket, "new_msg", payload)
+      broadcast!(socket, "new_msg", payload)
+    end
+
     {:noreply, socket}
   end
 
@@ -67,12 +70,12 @@ defmodule RokiWeb.RoomChannel do
   @available_hex_color_values ~w(6 7 8 9 A B C D E F)
   defp random_user_color() do
     c =
-      [
-        Enum.random(@available_hex_color_values),
-        Enum.random(@available_hex_color_values),
-        Enum.random(@available_hex_color_values)
-      ]
-      |> Enum.join("")
+      :crypto.hash(:md5, "abc")
+      |> Base.encode16()
+      |> String.graphemes()
+      |> Enum.filter(&(&1 in @available_hex_color_values))
+      |> Enum.take(3)
+      |> Enum.join()
 
     "##{c}"
   end

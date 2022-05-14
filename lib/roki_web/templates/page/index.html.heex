@@ -5,6 +5,8 @@
   </div>
 
   <%= if @current_user do %>
+  <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/chat_rooms.js")}></script>
+
   <div class="gapped full-height half-width">
     <h3>Public Chat Room</h3>
 
