@@ -28,7 +28,7 @@ defmodule RokiWeb.RoomChannel do
     socket =
       socket
       |> assign(:user_email, user.email)
-      |> assign(:user_color, random_user_color())
+      |> assign(:user_color, random_user_color(user.email))
 
     {:noreply, socket}
   end
@@ -68,9 +68,9 @@ defmodule RokiWeb.RoomChannel do
   end
 
   @available_hex_color_values ~w(6 7 8 9 A B C D E F)
-  defp random_user_color() do
+  defp random_user_color(s) do
     c =
-      :crypto.hash(:md5, "abc")
+      :crypto.hash(:md5, s)
       |> Base.encode16()
       |> String.graphemes()
       |> Enum.filter(&(&1 in @available_hex_color_values))
