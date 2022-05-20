@@ -1,24 +1,4 @@
-<span class="gapped full space-center">
-  <div id="online-users-section">
-    <h3>Online Users</h3>
-    <ul id="online-users"></ul>
-  </div>
-
-  <%= if @current_user do %>
-  <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/chat_rooms.js")}></script>
-
-  <div class="gapped full-height half-width">
-    <h3>Public Chat Room</h3>
-
-    <div id="chat-messages" class="full-height boxed" role="log" aria-live="polite">
-    </div>
-
-    <span>
-      <input id="chat-input" type="text" class="boxed" placeholder="message...">
-      <input type="submit" value="Send">
-    </span>
-  </div>
-  <% else %>
-  <h2>Please log in!</h2>
-  <% end %>
-</span>
+<nav class="vertical full-width space-center">
+  <%= link "Public Chat Room", to: Routes.chat_room_path(@conn, :index) %>
+  <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %>
+</nav>
